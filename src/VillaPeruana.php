@@ -3,6 +3,10 @@
 namespace App;
 
 use App\Naming\ProductName;
+use App\Products\Altocusco;
+use App\Products\Normal;
+use App\Products\Pisco;
+use App\Products\Vip;
 
 class VillaPeruana
 {
@@ -66,101 +70,35 @@ class VillaPeruana
     {
         switch ($this->name) {
             case ProductName::NORMAL;
-                $this->degradation();
-                $this->setQuality();
-                $this->sellIn--;
+                $normal = new Normal($this->name, $this->quality, $this->sellIn);
+                $normal->deal();
+
+                $this->quality = $normal->quality;
+                $this->sellIn = $normal->sellIn;
                 break;
             case ProductName::PISCO;
-                $this->piscoProductDemand();
-                $this->setQuality();
-                $this->sellIn--;
+                $pisco = new Pisco($this->name, $this->quality, $this->sellIn);
+                $pisco->deal();
+
+                $this->quality = $pisco->quality;
+                $this->sellIn = $pisco->sellIn;
                 break;
             case ProductName::TUMI;
                 break;
             case ProductName::VIP;
-                $this->productDemand();
-                $this->setQuality();
-                $this->sellIn--;
+                $vip = new Vip($this->name, $this->quality, $this->sellIn);
+                $vip->deal();
+
+                $this->quality = $vip->quality;
+                $this->sellIn = $vip->sellIn;
                 break;
             case ProductName::ALTOCUSCO;
-                $this->degradation();
-                $this->setQuality();
-                $this->sellIn--;
+                $normal = new Altocusco($this->name, $this->quality, $this->sellIn);
+                $normal->deal();
+
+                $this->quality = $normal->quality;
+                $this->sellIn = $normal->sellIn;
                 break;
-        }
-    }
-
-    /**
-     * esta funcion se encarga de definir la degradacion del producto, la mayoria tienen un valor normal
-     * pero el producto café altocusco es bastante delicado, por lo que se degrada 2 veces mas rápido
-     *
-     * @return void
-     */
-    public function degradation()
-    {
-        if ($this->name == ProductName::ALTOCUSCO) {
-            if ($this->sellIn <= 0) {
-                $this->quality -= 4;
-            } else {
-                $this->quality -= 2;
-            }
-        } else {
-            if ($this->sellIn <= 0) {
-                $this->quality -= 2;
-            } else {
-                $this->quality--;
-            }
-        }
-    }
-
-    /**
-     * definimos la calidad del producto vip que vale mas cada que pasan los dias antes de su fecha de venta
-     * despues de eso el producto ya no vale nada, es decir su calidad baja a 0
-     *
-     * @return void
-     */
-    public function productDemand()
-    {
-        if ($this->sellIn <= 0) {
-            $this->quality = 0;
-        } else if ($this->sellIn <= 5) {
-            $this->quality += 3;
-        } else if ($this->sellIn <= 10) {
-            $this->quality += 2;
-        } else {
-            $this->quality++;
-        }
-    }
-    /**
-     * se encarga de definir la calidad del producto llamado pisco
-     *
-     * @return void
-     */
-    public function piscoProductDemand()
-    {
-        if (($this->sellIn < 0) && ($this->name == ProductName::VIP)) {
-            $this->quality = 0;
-        } else if ($this->sellIn < 5) {
-            $this->quality += 2;
-        } else {
-            $this->quality++;
-        }
-    }
-
-    /**
-     * esta funcion se encarga de definir la calidad del producto despues de haberse hecho todas las operaciones
-     * para cada caso, para la mayoria caen en el mismo valor, pero para productos pisco y vip, su maxima calidad
-     * sera de 50.
-     *
-     * @return void
-     */
-    function setQuality()
-    {
-        if (($this->name == ProductName::PISCO || $this->name == ProductName::VIP) && $this->quality > 50) {
-            $this->quality = 50;
-        }
-        if ($this->quality < 0) {
-            $this->quality = 0;
         }
     }
 }
