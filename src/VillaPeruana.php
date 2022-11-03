@@ -2,17 +2,13 @@
 
 namespace App;
 
+use App\Naming\ProductName;
+
 class VillaPeruana
 {
     public $name;
     public $quality;
     public $sellIn;
-
-    public const NORMAL = "normal";
-    public const PISCO = "Pisco Peruano";
-    public const TUMI =  "Tumi de Oro Moche";
-    public const VIP = "Ticket VIP al concierto de Pick Floid";
-    public const ALTOCUSCO = "Café Altocusco";
 
     /**
      * lo de siempre, se encarga de que pasemos estos datos a fuerza
@@ -44,7 +40,7 @@ class VillaPeruana
     }
 
     /**
-     * esta funcion es la encargada de simular el paso de un dia en Vila Peruana
+     * esta funcion es la encargada de simular el paso de un dia en Villa Peruana
      * 
      * Al final de cada día, los valores se disminuyen en ambos valores.
      * Cuando la fecha de venta ya paso, es decir es menor a -1, los productos se degradan
@@ -69,24 +65,24 @@ class VillaPeruana
     public function tick()
     {
         switch ($this->name) {
-            case VillaPeruana::NORMAL;
+            case ProductName::NORMAL;
                 $this->degradation();
                 $this->setQuality();
                 $this->sellIn--;
                 break;
-            case VillaPeruana::PISCO;
+            case ProductName::PISCO;
                 $this->piscoProductDemand();
                 $this->setQuality();
                 $this->sellIn--;
                 break;
-            case VillaPeruana::TUMI;
+            case ProductName::TUMI;
                 break;
-            case VillaPeruana::VIP;
+            case ProductName::VIP;
                 $this->productDemand();
                 $this->setQuality();
                 $this->sellIn--;
                 break;
-            case VillaPeruana::ALTOCUSCO;
+            case ProductName::ALTOCUSCO;
                 $this->degradation();
                 $this->setQuality();
                 $this->sellIn--;
@@ -102,7 +98,7 @@ class VillaPeruana
      */
     public function degradation()
     {
-        if ($this->name == VillaPeruana::ALTOCUSCO) {
+        if ($this->name == ProductName::ALTOCUSCO) {
             if ($this->sellIn <= 0) {
                 $this->quality -= 4;
             } else {
@@ -142,7 +138,7 @@ class VillaPeruana
      */
     public function piscoProductDemand()
     {
-        if (($this->sellIn < 0) && ($this->name == VillaPeruana::VIP)) {
+        if (($this->sellIn < 0) && ($this->name == ProductName::VIP)) {
             $this->quality = 0;
         } else if ($this->sellIn < 5) {
             $this->quality += 2;
@@ -160,7 +156,7 @@ class VillaPeruana
      */
     function setQuality()
     {
-        if (($this->name == VillaPeruana::PISCO || $this->name == VillaPeruana::VIP) && $this->quality > 50) {
+        if (($this->name == ProductName::PISCO || $this->name == ProductName::VIP) && $this->quality > 50) {
             $this->quality = 50;
         }
         if ($this->quality < 0) {
