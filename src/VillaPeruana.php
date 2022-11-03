@@ -70,44 +70,51 @@ class VillaPeruana
     {
         switch ($this->name) {
             case VillaPeruana::NORMAL;
-                if ($this->sellIn <= 0) {
-                    $this->doubleDegradation();
-                } else {
-                    $this->simpleDegradation();
-                }
+                $this->degradation();
                 $this->setQuality();
-                $this->sellIn -= 1;
+                $this->sellIn--;
                 break;
             case VillaPeruana::PISCO;
-                $this->producPiscotDemand();
+                $this->piscoProductDemand();
                 $this->setQuality();
-                $this->sellIn -= 1;
+                $this->sellIn--;
                 break;
             case VillaPeruana::TUMI;
                 break;
             case VillaPeruana::VIP;
                 $this->productDemand();
                 $this->setQuality();
-                $this->sellIn -= 1;
+                $this->sellIn--;
                 break;
             case VillaPeruana::ALTOCUSCO;
-                if ($this->sellIn <= 0) {
-                    $this->quality -= 4;
-                } else {
-                    $this->doubleDegradation();
-                }
+                $this->degradation();
                 $this->setQuality();
                 $this->sellIn--;
                 break;
         }
     }
-    function simpleDegradation()
+
+    /**
+     * esta funcion se encarga de definir la degradacion del producto, la mayoria tienen un valor normal
+     * pero el producto café altocusco es bastante delicado, por lo que se degrada 2 veces mas rápido
+     *
+     * @return void
+     */
+    public function degradation()
     {
-        $this->quality--;
-    }
-    public function doubleDegradation()
-    {
-        $this->quality -= 2;
+        if ($this->name == VillaPeruana::ALTOCUSCO) {
+            if ($this->sellIn <= 0) {
+                $this->quality -= 4;
+            } else {
+                $this->quality -= 2;
+            }
+        } else {
+            if ($this->sellIn <= 0) {
+                $this->quality -= 2;
+            } else {
+                $this->quality--;
+            }
+        }
     }
 
     /**
@@ -133,7 +140,7 @@ class VillaPeruana
      *
      * @return void
      */
-    public function producPiscotDemand()
+    public function piscoProductDemand()
     {
         if (($this->sellIn < 0) && ($this->name == VillaPeruana::VIP)) {
             $this->quality = 0;
