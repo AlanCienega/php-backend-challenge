@@ -145,6 +145,24 @@ describe('Villa Peruana', function () {
                 expect($item->quality)->toBe(10);
                 expect($item->sellIn)->toBe(-1);
             });
+
+            it('actualiza elementos Tumi después de la fecha de venta con quality mayor de lo legendario', function () {
+                $item = VillaPeruana::of('Tumi de Oro Moche', 100, -1);
+
+                $item->tick();
+
+                expect($item->quality)->toBe(80);
+                expect($item->sellIn)->toBe(-1);
+            });
+
+            it('actualiza elementos Tumi después de la fecha de venta con quality menor de lo legendario', function () {
+                $item = VillaPeruana::of('Tumi de Oro Moche', -10, -1);
+
+                $item->tick();
+
+                expect($item->quality)->toBe(80);
+                expect($item->sellIn)->toBe(-1);
+            });
         });
 
 

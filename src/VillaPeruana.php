@@ -6,6 +6,7 @@ use App\Naming\ProductName;
 use App\Products\Altocusco;
 use App\Products\Normal;
 use App\Products\Pisco;
+use App\Products\Tumi;
 use App\Products\Vip;
 
 class VillaPeruana
@@ -84,6 +85,11 @@ class VillaPeruana
                 $this->sellIn = $pisco->sellIn;
                 break;
             case ProductName::TUMI;
+                $tumi = new Tumi($this->name, $this->quality, $this->sellIn);
+                $tumi->deal();
+
+                $this->quality = $tumi->quality;
+                $this->sellIn = $tumi->sellIn;
                 break;
             case ProductName::VIP;
                 $vip = new Vip($this->name, $this->quality, $this->sellIn);
